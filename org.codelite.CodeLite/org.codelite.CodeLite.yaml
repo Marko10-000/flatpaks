@@ -1,0 +1,44 @@
+id: org.codelite.CodeLite
+runtime: org.gnome.Platform
+runtime-version: 3.28
+sdk: org.gnome.Sdk
+branch: 12.0
+
+modules:
+    -   name: wx
+        sources:
+            -   type: archive
+                url: https://github.com/wxWidgets/wxWidgets/archive/v3.0.4.tar.gz
+                sha256: e176e339d4475d7f1e24b1e479959e58fac64516189d4ba2df3f2fb9e4719c84
+    -   name: libssh
+        buildsystem: cmake-ninja
+        builddir: true
+        sources:
+            -   type: archive
+                url: https://www.libssh.org/files/0.7/libssh-0.7.5.tar.xz
+                sha256: 54e86dd5dc20e5367e58f3caab337ce37675f863f80df85b6b1614966a337095
+            -   type: patch
+                path: libssh.patch
+    -   name: codelite
+        buildsystem: cmake-ninja
+        config-opts:
+            - -DCMAKE_INSTALL_PREFIX=/app
+            - -DCL_PREFIX=/app
+        sources:
+            -   type: archive
+                url: https://github.com/eranif/codelite/archive/12.0.tar.gz
+                sha256: e8912e3e0aea8890b5c65631ad94d58ddc587812c7ac6ec398e37aaa4b7005b4
+            -   type: file
+                url: http://repos.codelite.org/wxCrafterLibs/wxgui.zip
+                sha256: 498c39ad3cc46eab8232d5fa37627c27a27f843cbe9521f05f29b19def436e12
+    -   name: fix-libs
+        buildsystem: simple
+        build-commands:
+            - cp -v /usr/lib/libclang* /app/lib
+
+command: codelite
+finish-args:
+    - --filesystem=host
+    - --share=ipc
+    - --share=network
+    - --socket=x11
