@@ -3,6 +3,7 @@ runtime: org.gnome.Platform
 runtime-version: 3.28
 sdk: org.gnome.Sdk
 branch: 12.0
+separate-locales: false
 
 modules:
     -   name: wx
@@ -35,10 +36,22 @@ modules:
         buildsystem: simple
         build-commands:
             - cp -v /usr/lib/libclang* /app/lib
+    -   name: fix-appdata
+        sources:
+            -   type: file
+                path: appdata.xml
+                dest-filename: appdata.xml
+        buildsystem: simple
+        build-commands:
+            - mkdir -p /app/share/metainfo
+            - cp -v appdata.xml /app/share/metainfo/org.codelite.CodeLite.appdata.xml
+            - mv -v /app/share/applications/codelite.desktop /app/share/applications/org.codelite.CodeLite.desktop
+            - perl -pi -e s/Icon\\=codelite/Icon\\=org\\.codelite\\.CodeLite/g /app/share/applications/org.codelite.CodeLite.desktop
+            - bash -c "for x in /app/share/icons/hicolor/*/apps/codelite.png; do mv -v \$x \${x%codelite.png}org.codelite.CodeLite.png; done"
 
 command: codelite
 finish-args:
-    - --filesystem=host
+    - --filesystem=home
     - --share=ipc
     - --share=network
     - --socket=x11
