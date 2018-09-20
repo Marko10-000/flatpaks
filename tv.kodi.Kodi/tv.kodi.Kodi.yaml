@@ -1,0 +1,168 @@
+id: tv.kodi.Kodi
+runtime: org.freedesktop.Platform
+runtime-version: 18.08
+sdk: org.freedesktop.Sdk
+branch: 18-b2
+separate-locales: false
+
+modules:
+    -   name: lzo2
+        sources:
+            -   type: git
+                url: https://github.com/damageboy/lzo2.git
+    -   name: libass
+        sources:
+            -   type: archive
+                url: https://github.com/libass/libass/archive/0.14.0.tar.gz
+                sha256: 82e70ee1f9afe2e54ab4bf6510b83bb563fcb2af978f0f9da82e2dbc9ae0fd72
+    -   name: libcdio
+        sources:
+            -   type: archive
+                url: https://git.savannah.gnu.org/cgit/libcdio.git/snapshot/libcdio-release-2.0.0.tar.gz
+                sha256: d878079955b9f92875686052ad7b61bf7e812d40b11509c008e9f29f107c9770
+        config-opts:
+            - --without-cd-drive
+            - --without-cd-info
+            - --without-cdda-player
+            - --without-cd-read
+            - --without-iso-info
+            - --without-iso-read
+    -   name: flatbuffers
+        sources:
+            -   type: archive
+                url: https://github.com/google/flatbuffers/archive/v1.9.0.tar.gz
+                sha256: 5ca5491e4260cacae30f1a5786d109230db3f3a6e5a0eb45d0d0608293d247e3
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+            - -DCMAKE_INSTALL_LIBDIR=/app/lib
+            - -DCMAKE_BUILD_TYPE=Release
+            - -DCMAKE_CXX_COMPILER=clang++
+            - -DFLATBUFFERS_BUILD_FLATLIB=OFF
+            - -DFLATBUFFERS_BUILD_SHAREDLIB=ON
+    -   name: fmt
+        sources:
+            -   type: archive
+                url: https://github.com/fmtlib/fmt/archive/5.2.0.tar.gz
+                sha256: b0e8c71a8fb906123966686f788e83cd95ae499afe9c25ff6284f624488435ac
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+            - -DCMAKE_BUILD_TYPE=Release
+        cleanup:
+            - /lib64
+    -   name: fstrcmp
+        sources:
+            -   type: archive
+                url: https://netcologne.dl.sourceforge.net/project/fstrcmp/fstrcmp/0.7/fstrcmp-0.7.D001.tar.gz
+                sha256: e4018e850f80700acee8da296e56e15b1eef711ab15157e542e7d7e1237c3476
+        buildsystem: simple
+        build-commands:
+            - ./configure --prefix=/app
+            - echo "echo Skip PDF; echo '' > etc/building.pdf; echo '' > etc/readme.pdf; echo '' > etc/reference.pdf" > ps2pdf
+            - chmod +x ps2pdf
+            - PATH=$PATH:`pwd` make install
+    -   name: rapidjson
+        sources:
+            -   type: git
+                url: https://github.com/Tencent/rapidjson.git
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+            - -DCMAKE_BUILD_TYPE=Release
+    -   name: taglib
+        sources:
+            -   type: archive
+                url: https://github.com/taglib/taglib/archive/v1.11.1.tar.gz
+                sha256: b6d1a5a610aae6ff39d93de5efd0fdc787aa9e9dc1e7026fa4c961b26563526b
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+            - -DCMAKE_BUILD_TYPE=Release
+    -   "../tools/tinyxml/tinyxml.yaml"
+    -   "../shared-modules/glu/glu-9.0.0.json"
+    -   name: java
+        sources:
+            -   type: archive
+                url: https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz
+                sha256: f3b26abc9990a0b8929781310e14a339a7542adfd6596afb842fa0dd7e3848b2
+        buildsystem: simple
+        build-commands:
+            - mkdir -p /app/java
+            - cp -rv * /app/java
+            - echo "exec /app/java/bin/java \$@" > /app/bin/java
+            - echo "exec /app/java/bin/javac \$@" > /app/bin/javac
+            - chmod +x /app/bin/java /app/bin/javac
+        cleanup:
+            - "*"
+    -   name: swig
+        sources:
+            -   type: archive
+                url: https://github.com/swig/swig/archive/rel-3.0.12.tar.gz
+                sha256: 64971de92b8a1da0b9ffb4b51e9214bb936c4dbbc304367899cdb07280b94af6
+        cleanup:
+            - "*"
+    -   name: cmake
+        sources:
+            -   type: archive
+                url: https://cmake.org/files/v3.12/cmake-3.12.2.tar.gz
+                sha256: 0f97485799e51a7070cc11494f3e02349b0fc3a24cc12b082e737bf67a0581a4
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+            - -DCMAKE_BUILD_TYPE=Release
+        cleanup:
+            - "*"
+    -   "../shared-modules/python2.7/python-2.7.15.json"
+    -   "../shared-modules/udev/udev-175.json"
+    -   name: libnfs
+        sources:
+            -   type: archive
+                url: https://github.com/sahlberg/libnfs/archive/libnfs-3.0.0.tar.gz
+                sha256: 445d92c5fc55e4a5b115e358e60486cf8f87ee50e0103d46a02e7fb4618566a5
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+            - -DCMAKE_BUILD_TYPE=Release
+    -   name: sndio
+        sources:
+            -   type: archive
+                url: http://www.sndio.org/sndio-1.5.0.tar.gz
+                sha256: 12c70044749ad9cb7eaeb26c936816aa6b314fe4be71ef479d12272e4c5ad253
+    -   name: kodi
+        build-options:
+            build-args:
+                - --share=network
+        sources:
+            -   type: archive
+                url: https://github.com/xbmc/xbmc/archive/18.0b2-Leia.tar.gz
+                sha256: 25fc0aabfb523d4db19e08b1990d4851592ee2adec0424f5fb729bd3672eae69
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+            - -DCMAKE_BUILD_TYPE=Release
+            - -DCMAKE_INSTALL_LIBDIR=/app/lib
+    -   name: fix-starter
+        buildsystem: simple
+        build-commands:
+            - bash -c "for x in /app/share/icons/hicolor/*/apps/kodi.png; do mv -v \$x \${x%kodi.png}tv.kodi.Kodi.png; done"
+            - mv /app/share/applications/kodi.desktop /app/share/applications/tv.kodi.Kodi.desktop
+            - perl -pi -e s/Icon\\=kodi/Icon\\=tv\\.kodi\\.Kodi/g /app/share/applications/tv.kodi.Kodi.desktop
+cleanup:
+    - /include
+    - /lib/debug
+    - /lib/cmake
+    - /lib/pkgconfig
+    - /share/doc
+    - /share/info
+    - /share/man
+    - /share/xsessions
+
+command: kodi
+finish-args:
+    - --share=network
+    - --socket=x11
+    - --socket=wayland
+    - --socket=pulseaudio
+    - --filesystem=home
+    - --device=all
