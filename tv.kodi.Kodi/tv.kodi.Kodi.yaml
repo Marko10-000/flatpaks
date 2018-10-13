@@ -2,14 +2,10 @@ id: tv.kodi.Kodi
 runtime: org.freedesktop.Platform
 runtime-version: 18.08
 sdk: org.freedesktop.Sdk
-branch: 18-b2
+branch: 18-b3
 separate-locales: false
 
 modules:
-    -   name: lzo2
-        sources:
-            -   type: git
-                url: https://github.com/damageboy/lzo2.git
     -   name: libass
         sources:
             -   type: archive
@@ -62,14 +58,6 @@ modules:
             - echo "echo Skip PDF; echo '' > etc/building.pdf; echo '' > etc/readme.pdf; echo '' > etc/reference.pdf" > ps2pdf
             - chmod +x ps2pdf
             - PATH=$PATH:`pwd` make install
-    -   name: rapidjson
-        sources:
-            -   type: git
-                url: https://github.com/Tencent/rapidjson.git
-        buildsystem: cmake-ninja
-        builddir: true
-        config-opts:
-            - -DCMAKE_BUILD_TYPE=Release
     -   name: taglib
         sources:
             -   type: archive
@@ -129,14 +117,26 @@ modules:
             -   type: archive
                 url: http://www.sndio.org/sndio-1.5.0.tar.gz
                 sha256: 12c70044749ad9cb7eaeb26c936816aa6b314fe4be71ef479d12272e4c5ad253
+    -   name: lzo2
+        sources:
+            -   type: git
+                url: https://github.com/damageboy/lzo2.git
+    -   name: rapidjson
+        sources:
+            -   type: git
+                url: https://github.com/Tencent/rapidjson.git
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+            - -DCMAKE_BUILD_TYPE=Release
     -   name: kodi
         build-options:
             build-args:
                 - --share=network
         sources:
             -   type: archive
-                url: https://github.com/xbmc/xbmc/archive/18.0b2-Leia.tar.gz
-                sha256: 25fc0aabfb523d4db19e08b1990d4851592ee2adec0424f5fb729bd3672eae69
+                url: https://github.com/xbmc/xbmc/archive/18.0b3-Leia.tar.gz
+                sha256: cc5f1a75287438b2336c49a265019a4cab9626235e05a70345d77e4cecd6dce3
         buildsystem: cmake-ninja
         builddir: true
         config-opts:
