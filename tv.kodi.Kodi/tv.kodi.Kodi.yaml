@@ -129,6 +129,16 @@ modules:
         builddir: true
         config-opts:
             - -DCMAKE_BUILD_TYPE=Release
+    -   name: ffmpeg
+        sources:
+            -   type: archive
+                url: https://ffmpeg.org/releases/ffmpeg-4.0.2.tar.bz2
+                sha256: 346c51735f42c37e0712e0b3d2f6476c86ac15863e4445d9e823fe396420d056
+        config-opts:
+            - --enable-vaapi
+            - --enable-vdpau
+            - --enable-postproc
+            - --enable-gpl
     -   name: kodi
         build-options:
             build-args:
@@ -157,6 +167,7 @@ cleanup:
     - /share/info
     - /share/man
     - /share/xsessions
+    - "*.a"
 
 command: kodi
 finish-args:
