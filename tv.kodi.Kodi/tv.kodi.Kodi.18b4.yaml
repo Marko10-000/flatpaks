@@ -1,0 +1,75 @@
+id: tv.kodi.Kodi
+runtime: org.freedesktop.Platform
+runtime-version: 18.08
+sdk: org.freedesktop.Sdk
+branch: 18-b4
+separate-locales: false
+sdk-extensions:
+    - org.freedesktop.Sdk.Extension.openjdk10
+
+modules:
+    -   packages/cdio.yaml
+    -   packages/flatbuffers.yaml
+    -   packages/fmt.yaml
+    -   packages/fstrcmp.yaml
+    -   packages/taglib.yaml
+    -   "../tools/tinyxml/tinyxml.yaml"
+    -   "../shared-modules/glu/glu-9.0.0.json"
+    -   packages/swig.yaml
+    -   "../shared-modules/python2.7/python-2.7.15.json"
+    -   "../shared-modules/udev/udev-175.json"
+    -   packages/libnfs.yaml
+    -   packages/sndio.yaml
+    -   packages/lzo.yaml
+    -   packages/rapidjson.yaml
+    -   packages/ffmpeg.yaml
+    -   packages/samba.yaml
+    -   name: kodi
+        sources:
+            -   type: archive
+                url: https://github.com/xbmc/xbmc/archive/18.0b3-Leia.tar.gz
+                sha256: cc5f1a75287438b2336c49a265019a4cab9626235e05a70345d77e4cecd6dce3
+            -   type: file
+                url: http://mirrors.kodi.tv/build-deps/sources/crossguid-8f399e8bd4.tar.gz
+                sha256: 3d77d09a5df0de510aeeb940df4cb534787ddff3bb1828779753f5dfa1229d10
+                dest: build/download/
+            -   type: file
+                url: https://github.com/xbmc/libdvdcss/archive/1.4.1-Leia-Beta-3.tar.gz
+                sha256: 579aa102ac14ff4a21aa4081fe47f8cb3941002a37ee96286d3737afd79e80d9
+                dest: build/download/
+            -   type: file
+                url: https://github.com/xbmc/libdvdread/archive/6.0.0-Leia-Alpha-3.tar.gz
+                sha256: a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf
+                dest: build/download/
+            -   type: file
+                url: https://github.com/xbmc/libdvdnav/archive/6.0.0-Leia-Alpha-3.tar.gz
+                sha256: 071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a
+                dest: build/download/
+                dest-filename: libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+            - -DCMAKE_BUILD_TYPE=Release
+            - -DCMAKE_INSTALL_LIBDIR=/app/lib
+            - -DJava_JAVA_EXECUTABLE=/usr/lib/sdk/openjdk10/bin/java
+            - -DCROSSGUID_URL=build/download/crossguid-8f399e8bd4.tar.gz
+            - -DLIBDVDCSS_URL=build/download/1.4.1-Leia-Beta-3.tar.gz
+            - -DLIBDVDREAD_URL=build/download/6.0.0-Leia-Alpha-3.tar.gz
+            - -DLIBDVDNAV_URL=build/download/libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+        cleanup:
+            - /include
+            - /share/doc
+            - /share/man
+
+cleanup:
+    - /lib/debug
+rename-desktop-file: kodi.desktop
+rename-icon: kodi
+command: kodi
+finish-args:
+    - --share=network
+    - --socket=x11
+    - --socket=wayland
+    - --socket=pulseaudio
+    - --filesystem=home
+    - --device=all

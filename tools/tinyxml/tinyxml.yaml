@@ -1,24 +1,16 @@
 name: tinyxml
+cleanup:
+    - /bin
+    - /include
+    - /lib/pkgconfig
+    - /share/doc
+    - "*.a"
+    - "*.la"
 sources:
     -   type: archive
-        url: https://netcologne.dl.sourceforge.net/project/tinyxml/tinyxml/2.6.2/tinyxml_2_6_2.tar.gz
-        sha256: 15bdfdcec58a7da30adc87ac2b078e4417dbe5392f3afb719f9ba6d062645593
-    -   type: file
-        url: https://git.archlinux.org/svntogit/community.git/plain/trunk/tinyxml.pc?h=packages/tinyxml
-        sha256: 0e37a568eaebb8f0644f148a3d3efa921ac518217e1c0de46c2859d26516bcc4
-        dest-filename: tinyxml.pc
-    -   type: patch
-        path: tinyxml-2.5.3-stl.patch
-    -   type: file
-        path: entity.patch
-    -   type: file
-        path: tinyxml.patch
-buildsystem: simple
-build-commands:
-    - patch -p0 -i entity.patch
-    - patch -p0 -i tinyxml.patch
-    - make
-    - g++ -fPIC "$CXXFLAGS" -shared -o "libtinyxml.so" -Wl,-soname,"libtinyxml.so" $(ls *.o | grep -v xmltest)
-    - install libtinyxml.so /app/lib
-    - install tinyxml.pc /app/lib/pkgconfig/tinyxml.pc
-    - install *.h /app/include
+        url: http://mirrors.kodi.tv/build-deps/sources/tinyxml-2.6.2_2.tar.gz
+        sha256: 8164c9ad48b9028667768a584d62f7760cfbfb90d0dd6214ad174403058da10c
+    -   type: script
+        dest-filename: autogen.sh
+        commands:
+            - autoreconf -vfi

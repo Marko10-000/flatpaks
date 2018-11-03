@@ -1,0 +1,33 @@
+name: samba
+sources:
+    -   type: archive
+        url: https://download.samba.org/pub/samba/stable/samba-4.9.1.tar.gz
+        sha256: 33118cbe83a87be085eba1aae6e597878b02d6ac9b2da67454ed33cf3e9853f2
+buildsystem: simple
+build-commands:
+    - LDFLAGS=-lcurses ./buildtools/bin/waf configure --prefix=/app --without-json-audit --disable-python --without-ad-dc --without-acl-support --without-ldap --without-ads --without-pam --without-systemd
+    - ./buildtools/bin/waf build -j $FLATPAK_BUILDER_N_JOBS
+    - ./buildtools/bin/waf install
+modules:
+    -   name: rpcsvc-proto
+        sources:
+            -   type: archive
+                url: https://github.com/thkukuk/rpcsvc-proto/releases/download/v1.4/rpcsvc-proto-1.4.tar.gz
+                sha256: 867e46767812784d8dda6d8d931d6fabb30168abb02d87a2a205be6d5a2934a7
+        cleanup:
+            - "*.a"
+            - /bin
+            - /include
+            - /share
+cleanup:
+    - "*.a"
+    - "*.la"
+    - /bin
+    - /bind-dns
+    - /include
+    - /lib/pkgconfig
+    - /libexec
+    - /private
+    - /sbin
+    - /share
+    - /var
