@@ -5,7 +5,7 @@ Sources
 
 Original source:
 
-	https://git.marko10000.tk/flatpaks/flatpak
+	https://git.marko10-000.de/flatpaks/flatpak
 
 Github-Mirror:
 
@@ -44,7 +44,7 @@ Replace **\<app\>** with the wanted app name (e.g. for CodeLite replace it with
 
 ```bash
 $ flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-$ flatpak remote-add --if-not-exists marko10_000 https://build.marko10000.tk/marko10_000.flatpakrepo
+$ flatpak remote-add --if-not-exists marko10_000 https://build.marko10-000.de/marko10_000.flatpakrepo
 $ flatpak install --assumeyes marko10_000 <app>
 ```
 
