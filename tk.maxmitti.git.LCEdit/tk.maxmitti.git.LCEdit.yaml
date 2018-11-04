@@ -1,0 +1,26 @@
+id: tk.maxmitti.git.LCEdit
+runtime: org.kde.Platform
+runtime-version: 5.11
+sdk: org.kde.Sdk
+branch: b0.1
+
+modules:
+    -   name: lcedit
+        sources:
+            -   type: archive
+                url: https://git.maxmitti.tk/Fulgen-pub/lcedit/snapshot/lcedit-0.1.tar.gz
+                sha256: ef17ca54465ce0e4a7fcb37d1d1ecca3a1cdd02c1f9a9097d763a7bfd918a129
+            -   type: patch
+                path: cmake.patch
+        buildsystem: cmake-ninja
+        cleanup:
+            - "*.a"
+
+cleanup:
+    - /lib/debug
+
+command: lcedit
+finish-args:
+    - --filesystem=host
+    - --socket=x11
+    - --socket=wayland

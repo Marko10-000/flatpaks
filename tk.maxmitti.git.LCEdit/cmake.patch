@@ -1,0 +1,31 @@
+diff -ru lcedit-0.1/CMakeLists.txt lcedit-0.1_/CMakeLists.txt
+--- lcedit-0.1/CMakeLists.txt   2018-11-03 17:38:27.000000000 +0100
++++ lcedit-0.1_/CMakeLists.txt  2018-11-04 12:46:12.735512462 +0100
+@@ -47,21 +47,27 @@
+ #qt5_wrap_ui(src/main.cpp src/include.h src/lcedit.ui)
+
+ add_library(liblcedit STATIC ${LIBLCEDIT_SRC})
++install(TARGETS liblcedit DESTINATION lib)
+ add_executable(lcedit ${LCEDIT_SRC})
++install(TARGETS lcedit DESTINATION bin)
+
+ # Use the Widgets module from Qt 5.
+ target_link_libraries(liblcedit Qt5::Core Qt5::Widgets)
+ target_link_libraries(lcedit Qt5::Core Qt5::Widgets liblcedit)
+
+ add_library(libc4group SHARED ${LIBC4GROUP_SRC})
++install(TARGETS libc4group DESTINATION lib)
+ target_link_libraries(libc4group Qt5::Core ${ZLIB_LIBRARIES})
+ add_library(plugin_c4group SHARED ${PLUGIN_C4GROUP_SRC} ${LCEDIT_UI})
++install(TARGETS plugin_c4group DESTINATION bin)
+ target_link_libraries(plugin_c4group Qt5::Widgets libc4group liblcedit)
+
+ if (KF5TextEditor_FOUND)
+   add_library(plugin_texteditor SHARED src/plugins/texteditor.cpp ${LCEDIT_UI})
++  install(TARGETS plugin_texteditor DESTINATION bin)
+   target_link_libraries(plugin_texteditor Qt5::Widgets KF5::TextEditor liblcedit)
+ endif()
+
+ add_library(plugin_search SHARED src/plugins/search.cpp src/plugins/search.ui ${LCEDIT_UI})
++install(TARGETS plugin_search DESTINATION bin)
+ target_link_libraries(plugin_search Qt5::Widgets liblcedit)
