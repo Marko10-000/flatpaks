@@ -32,6 +32,7 @@ Contains:
 	- Blu-ray-support isn't added (will be added in the future)
 	- Remote control-support isn't added (has somebody the hardware for it?)
 	- Extension: inputstream libs aren't add (coming soon)
+- [LCEdit](https://clonkspot.org/forum/topic_show.pl?tid=906) (tk.maxmitti.git.LCEdit)
 
 Get a flatpak
 =============
